@@ -76,4 +76,16 @@ public class ProduitBancaire {
     public int hashCode() {
         return Objects.hash(id);
     }
+    @PreRemove
+    private void gererLiens()
+    {
+        // On enlève le produit bancaire de la liste des produits qui est dans le type de produit lié
+        // Cela casse le lien de TypeProduit vers ce produit bancaire
+        if (typeProduit!=null)
+        {
+            typeProduit.getProduitsBancaires().remove(this);
+        }
+        // On casse le lien du produit bancaire vers son type de produit
+        typeProduit=null;
+    }
 }
