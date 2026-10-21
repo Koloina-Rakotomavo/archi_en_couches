@@ -5,6 +5,7 @@ import com.example.banque.model.PersonneMorale;
 import com.example.banque.model.PersonnePhysique;
 import com.example.banque.model.TypeProduit;
 import com.example.banque.repository.PersonneMoraleRepository;
+import com.example.banque.repository.PersonnePhysiqueRepository;
 import com.example.banque.repository.TypeProduitRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +27,9 @@ public class BanqueApplication
     }
 
     @Bean
-    CommandLineRunner testerBackend(TypeProduitRepository typeProduitRepository)
+    CommandLineRunner testerBackend(TypeProduitRepository typeProduitRepository,
+                                   PersonneMoraleRepository personneMoraleRepository,
+                                   PersonnePhysiqueRepository personnePhysiqueRepository)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
@@ -102,18 +105,18 @@ public class BanqueApplication
             PersonneMorale pm2 = new PersonneMorale("45 Boulevard du fleuve", "SIRET2", "Meubles cosy");
             PersonneMorale pm3 = new PersonneMorale("14 allee des platanes", "SIRET3", "Espaces tres verts");
             // Enregistrement en base
-            PersonneMoraleRepository.save(pm1);
-            PersonneMoraleRepository.save(pm2);
-            PersonneMoraleRepository.save(pm3);
+            personneMoraleRepository.save(pm1);
+            personneMoraleRepository.save(pm2);
+            personneMoraleRepository.save(pm3);
             // Affichage du résultat
-            System.out.println(PersonneMoraleRepository.findAll());
+            System.out.println(personneMoraleRepository.findAll());
             // Ajout de personnes physiques
             PersonnePhysique pp1 = new PersonnePhysique("19 rue des fleurs, 80000 Amiens", "Dupont", "Jean");
-            PersonnePhysiqueRepository.save(pp1);
+            personnePhysiqueRepository.save(pp1);
             PersonnePhysique pp2 = new PersonnePhysique("143 boulevard des landes, 64200 Anglet", "Eche", "Piou");
-            PersonnePhysiqueRepository.save(pp2);
+            personnePhysiqueRepository.save(pp2);
             PersonnePhysique pp3 = new PersonnePhysique("56 avenue de Paris, 60000 Beauvais", "Tristan", "Jacques");
-            PersonnePhysiqueRepository.save(pp3);
+            personnePhysiqueRepository.save(pp3);
             System.out.println(personnePhysiqueRepository.findAll());
 
         };
