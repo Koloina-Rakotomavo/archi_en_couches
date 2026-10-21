@@ -1,7 +1,10 @@
 package com.example.banque;
 
 
+import com.example.banque.model.PersonneMorale;
+import com.example.banque.model.PersonnePhysique;
 import com.example.banque.model.TypeProduit;
+import com.example.banque.repository.PersonneMoraleRepository;
 import com.example.banque.repository.TypeProduitRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -95,7 +98,23 @@ public class BanqueApplication
             System.out.println("*******************************\nListe des produits dont la rentabilité est >=0.3 pour la banque");
             listetypeProduit=typeProduitRepository.findByTauxInteretAgiosGreaterThanEqualOrderByTauxInteretAgiosAsc(0.3f);
             System.out.println(listetypeProduit);
-
+            PersonneMorale pm1 = new PersonneMorale("102bis rue du Vesuve", "SIRET1", "Pizza Tonio");
+            PersonneMorale pm2 = new PersonneMorale("45 Boulevard du fleuve", "SIRET2", "Meubles cosy");
+            PersonneMorale pm3 = new PersonneMorale("14 allee des platanes", "SIRET3", "Espaces tres verts");
+            // Enregistrement en base
+            PersonneMoraleRepository.save(pm1);
+            PersonneMoraleRepository.save(pm2);
+            PersonneMoraleRepository.save(pm3);
+            // Affichage du résultat
+            System.out.println(PersonneMoraleRepository.findAll());
+            // Ajout de personnes physiques
+            PersonnePhysique pp1 = new PersonnePhysique("19 rue des fleurs, 80000 Amiens", "Dupont", "Jean");
+            PersonnePhysiqueRepository.save(pp1);
+            PersonnePhysique pp2 = new PersonnePhysique("143 boulevard des landes, 64200 Anglet", "Eche", "Piou");
+            PersonnePhysiqueRepository.save(pp2);
+            PersonnePhysique pp3 = new PersonnePhysique("56 avenue de Paris, 60000 Beauvais", "Tristan", "Jacques");
+            PersonnePhysiqueRepository.save(pp3);
+            System.out.println(personnePhysiqueRepository.findAll());
 
         };
     }
