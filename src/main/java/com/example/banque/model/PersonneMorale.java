@@ -46,7 +46,7 @@ public class PersonneMorale extends Personne {
     }
 
     @PreRemove
-    private void gererLiens() {
+    private void gererLiensPM() {
         setTypePersonneMorale(null);
     }
 
