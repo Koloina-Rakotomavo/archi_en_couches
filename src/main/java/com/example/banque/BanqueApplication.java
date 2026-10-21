@@ -2,7 +2,7 @@ package com.example.banque;
 
 
 import com.example.banque.model.TypeProduit;
-import com.example.banque.model.TypeProduitRepository;
+import com.example.banque.repository.TypeProduitRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

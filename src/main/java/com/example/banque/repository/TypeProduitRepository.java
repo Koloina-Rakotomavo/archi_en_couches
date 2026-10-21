@@ -1,4 +1,4 @@
-package com.example.banque.model;
+package com.example.banque.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.banque.model.TypeProduit;
