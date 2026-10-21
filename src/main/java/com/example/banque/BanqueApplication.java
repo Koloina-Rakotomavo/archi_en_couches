@@ -78,6 +78,25 @@ public class BanqueApplication
             Page<TypeProduit> page = typeProduitRepository.findAll(PageRequest.of(3, 1, Sort.by(Sort.Direction.ASC, "intitule")));
             System.out.println("\n***************** Test pagination");
             System.out.println(page + "\n Contenu de la page" + page.getContent());
+            ArrayList<TypeProduit> produits =
+                    typeProduitRepository.findByIntitule("Prêt consommation");
+
+            System.out.println("\n*** Recherche par intitulé ***");
+            System.out.println(produits);
+            System.out.println("*******************************\nRechercher les types de produits dont le type contient compte");
+            listetypeProduit=typeProduitRepository.findByIntituleContains("compte");
+            System.out.println(listetypeProduit);
+            System.out.println("*******************************\nRechercher les types de produits dont le type contient compte");
+            listetypeProduit=typeProduitRepository.findByIntituleLike("%compte%");
+            System.out.println(listetypeProduit);
+            System.out.println("*******************************\nRechercher les 3 derniers types de produits saisis en base");
+            listetypeProduit=typeProduitRepository.findFirst3ByOrderByIdDesc();
+            System.out.println(listetypeProduit);
+            System.out.println("*******************************\nListe des produits dont la rentabilité est >=0.3 pour la banque");
+            listetypeProduit=typeProduitRepository.findByTauxInteretAgiosGreaterThanEqualOrderByTauxInteretAgiosAsc(0.3f);
+            System.out.println(listetypeProduit);
+
+
         };
     }
 }
