@@ -8,6 +8,7 @@ import com.example.banque.model.TypeProduit;
 import com.example.banque.repository.PersonneMoraleRepository;
 import com.example.banque.repository.PersonnePhysiqueRepository;
 import com.example.banque.repository.TypeProduitRepository;
+import com.example.banque.repository.ProduitBancaireRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -30,7 +32,8 @@ public class BanqueApplication
     @Bean
     CommandLineRunner testerBackend(TypeProduitRepository typeProduitRepository,
                                    PersonneMoraleRepository personneMoraleRepository,
-                                   PersonnePhysiqueRepository personnePhysiqueRepository)
+                                   PersonnePhysiqueRepository personnePhysiqueRepository,
+                                   ProduitBancaireRepository produitBancaireRepository)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
