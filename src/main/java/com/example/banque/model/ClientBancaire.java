@@ -49,6 +49,14 @@ public class ClientBancaire {
         personnes.remove(personne);
         personne.getClientsBancaires().remove(this);
     }
+    @PreRemove
+    private void gererLiens() {
+        for (Personne personne : new ArrayList<>(personnes)) {
+            personne.getClientsBancaires().remove(this);
+        }
+        personnes.clear();
+    }
+
     @Override
     public String toString() {
         return "\nClientBancaire{" +
