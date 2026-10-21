@@ -3,7 +3,6 @@ package com.example.banque.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -24,6 +23,22 @@ public class ClientBancaire {
             // nom de la colonne clé étrangère côté Personne
             inverseJoinColumns = { @JoinColumn(name = "personne_id") })
     private List<Personne> personnes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "clientBancaire",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<ProduitBancaire> produitsBancaires = new ArrayList<>();
+
+    public List<ProduitBancaire> getProduitsBancaires() { return produitsBancaires; }
+
+    public void addProduitBancaire(ProduitBancaire produitBancaire) {
+        produitBancaire.setClientBancaire(this);
+    }
+
+    public void removeProduitBancaire(ProduitBancaire produitBancaire) {
+        if (produitBancaire.getClientBancaire() == this) {
+            produitBancaire.setClientBancaire(null);
+        }
+    }
 
     public ClientBancaire() {}
 
@@ -55,6 +70,11 @@ public class ClientBancaire {
             personne.getClientsBancaires().remove(this);
         }
         personnes.clear();
+        // Un produit doit conserver un client (cardinalité 1).
+        if (!produitsBancaires.isEmpty()) {
+            throw new IllegalStateException(
+                    "Réaffectez ou supprimez les produits avant de supprimer leur client.");
+        }
     }
 
     @Override

@@ -7,6 +7,9 @@ import com.example.banque.repository.ClientBancaireRepository;
 import com.example.banque.model.PersonnePhysique;
 import com.example.banque.model.ProduitBancaire;
 import com.example.banque.model.TypeProduit;
+import com.example.banque.model.Operation;
+import com.example.banque.repository.OperationRepository;
+import java.sql.Date;
 import com.example.banque.model.TypePersonneMorale;
 import com.example.banque.repository.TypePersonneMoraleRepository;
 import com.example.banque.repository.PersonneMoraleRepository;
@@ -39,7 +42,8 @@ public class BanqueApplication
                                    PersonnePhysiqueRepository personnePhysiqueRepository,
                                    ProduitBancaireRepository produitBancaireRepository,
                                    TypePersonneMoraleRepository typePersonneMoraleRepository,
-                                   ClientBancaireRepository clientBancaireRepository)
+                                   ClientBancaireRepository clientBancaireRepository,
+                                   OperationRepository operationRepository)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
@@ -150,13 +154,14 @@ public class BanqueApplication
             typeProduitRepository.save(tp3);
 
             tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
-            ProduitBancaire pb1 = new ProduitBancaire(1,"num1", tp3);
+            ClientBancaire clientProduits = clientBancaireRepository.save(new ClientBancaire());
+            ProduitBancaire pb1 = new ProduitBancaire(1,"num1", tp3, clientProduits);
             produitBancaireRepository.save(pb1);
             tp2= typeProduitRepository.findById(tp2.getId()).orElseThrow();
-            ProduitBancaire pb2 = new ProduitBancaire(2,"num2",tp2);
+            ProduitBancaire pb2 = new ProduitBancaire(2,"num2",tp2, clientProduits);
             produitBancaireRepository.save(pb2);
             tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
-            ProduitBancaire pb3 = new ProduitBancaire(3,"num3",tp3);
+            ProduitBancaire pb3 = new ProduitBancaire(3,"num3",tp3, clientProduits);
             produitBancaireRepository.save(pb3);
 
             typesProduits=typeProduitRepository.findAll();
@@ -185,13 +190,13 @@ public class BanqueApplication
             }
             // Création de produits bancaires
             tp2= typeProduitRepository.findById(tp2.getId()).orElseThrow();
-            pb2 = new ProduitBancaire(1,"num4",tp2);
+            pb2 = new ProduitBancaire(1,"num4",tp2, clientProduits);
             produitBancaireRepository.save(pb2);
             tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
-            pb3 = new ProduitBancaire(2,"num5",tp3);
+            pb3 = new ProduitBancaire(2,"num5",tp3, clientProduits);
             produitBancaireRepository.save(pb3);
             tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
-            pb1 = new ProduitBancaire(3,"num6",tp3);
+            pb1 = new ProduitBancaire(3,"num6",tp3, clientProduits);
             produitBancaireRepository.save(pb1);
 // Création de personnes physiques
             pp1 =new PersonnePhysique("adresse_pp1","nom_pp1","prenom_pp1");
@@ -246,6 +251,13 @@ public class BanqueApplication
                     "\nLes personnes morales" +
                     "***********************************************************");
             System.out.println(personneMoraleRepository.findAll());
+
+            // 7 : opération rattachée à un produit bancaire.
+            Operation operation = new Operation(Date.valueOf("2026-10-21"), 25.0f,
+                    "CREDIT", "Versement de démonstration", pb2);
+            operationRepository.save(operation);
+            System.out.println("\n*** Opérations bancaires ***");
+            System.out.println(operationRepository.findAll());
 
         };
     }

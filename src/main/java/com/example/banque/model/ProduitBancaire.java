@@ -3,6 +3,8 @@ package com.example.banque.model;
 import com.example.banque.model.TypeProduit;
 import jakarta.persistence.*;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
@@ -29,6 +31,45 @@ public class ProduitBancaire {
         this.typeProduit = TypeProduit;
         TypeProduit.getProduitsBancaires().add(this);
     }
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "client_bancaire_id", nullable = false)
+    private ClientBancaire clientBancaire;
+
+    // Composition : les opérations sont supprimées avec leur produit.
+    @OneToMany(mappedBy = "produitBancaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Operation> operations = new ArrayList<>();
+
+    public ClientBancaire getClientBancaire() { return clientBancaire; }
+
+    public void setClientBancaire(ClientBancaire nouveauClient) {
+        if (clientBancaire == nouveauClient) return;
+        if (clientBancaire != null) {
+            clientBancaire.getProduitsBancaires().removeIf(pb -> pb == this);
+        }
+        clientBancaire = nouveauClient;
+        if (nouveauClient != null &&
+                nouveauClient.getProduitsBancaires().stream().noneMatch(pb -> pb == this)) {
+            nouveauClient.getProduitsBancaires().add(this);
+        }
+    }
+
+    public List<Operation> getOperations() { return operations; }
+
+    public void addOperation(Operation operation) {
+        operation.setProduitBancaire(this);
+    }
+
+    public void removeOperation(Operation operation) {
+        if (operation.getProduitBancaire() == this) operation.setProduitBancaire(null);
+    }
+
+    public ProduitBancaire(float soldeCourant, String numeroCompte,
+                          TypeProduit typeProduit, ClientBancaire clientBancaire) {
+        this(soldeCourant, numeroCompte, typeProduit);
+        setClientBancaire(clientBancaire);
+    }
+
     public ProduitBancaire() {
     }
     public TypeProduit getTypeProduit() {
@@ -70,7 +111,7 @@ public class ProduitBancaire {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProduitBancaire that = (ProduitBancaire) o;
-        return this.id.equals(that.id);
+        return id != null && id.equals(that.id);
     }
     @Override
     public int hashCode() {
@@ -87,5 +128,6 @@ public class ProduitBancaire {
         }
         // On casse le lien du produit bancaire vers son type de produit
         typeProduit=null;
+        setClientBancaire(null);
     }
 }
