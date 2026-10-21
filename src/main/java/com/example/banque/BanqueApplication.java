@@ -2,6 +2,8 @@ package com.example.banque;
 
 
 import com.example.banque.model.PersonneMorale;
+import com.example.banque.model.ClientBancaire;
+import com.example.banque.repository.ClientBancaireRepository;
 import com.example.banque.model.PersonnePhysique;
 import com.example.banque.model.ProduitBancaire;
 import com.example.banque.model.TypeProduit;
@@ -18,7 +20,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,8 @@ public class BanqueApplication
                                    PersonneMoraleRepository personneMoraleRepository,
                                    PersonnePhysiqueRepository personnePhysiqueRepository,
                                    ProduitBancaireRepository produitBancaireRepository,
-                                   TypePersonneMoraleRepository typePersonneMoraleRepository)
+                                   TypePersonneMoraleRepository typePersonneMoraleRepository,
+                                   ClientBancaireRepository clientBancaireRepository)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
@@ -192,11 +194,11 @@ public class BanqueApplication
             pb1 = new ProduitBancaire(3,"num6",tp3);
             produitBancaireRepository.save(pb1);
 // Création de personnes physiques
-            PersonnePhysique pp1=new PersonnePhysique("adresse_pp1","nom_pp1","prenom_pp1");
+            pp1 =new PersonnePhysique("adresse_pp1","nom_pp1","prenom_pp1");
             personnePhysiqueRepository.save(pp1);
-            PersonnePhysique pp2=new PersonnePhysique("adresse_pp2","nom_pp2","prenom_pp2");
+            pp2 =new PersonnePhysique("adresse_pp2","nom_pp2","prenom_pp2");
             personnePhysiqueRepository.save(pp2);
-            PersonnePhysique pp3=new PersonnePhysique("adresse_pp3","nom_pp3","prenom_pp3");
+            pp3 =new PersonnePhysique("adresse_pp3","nom_pp3","prenom_pp3");
             personnePhysiqueRepository.save(pp3);
 // Création de types de personnes morales
             TypePersonneMorale tpm1=new TypePersonneMorale("SA");
@@ -206,15 +208,15 @@ public class BanqueApplication
             TypePersonneMorale tpm3=new TypePersonneMorale("Auto Entrepreneur");
             typePersonneMoraleRepository.save(tpm3);
 // Création de personnes morales
-            PersonneMorale pm1=new PersonneMorale("pm1", "SiRET pm1","raisonsoc pm1", tpm1);
+            pm1 =new PersonneMorale("pm1", "SiRET pm1","raisonsoc pm1", tpm1);
             personneMoraleRepository.save(pm1);
-            PersonneMorale pm2=new PersonneMorale("pm2", "SiRET pm2","raisonsoc pm2", tpm2);
+            pm2 =new PersonneMorale("pm2", "SiRET pm2","raisonsoc pm2", tpm2);
             personneMoraleRepository.save(pm2);
-            PersonneMorale pm3=new PersonneMorale("pm3", "SiRET pm3","raisonsoc pm3", tpm1);
+            pm3 =new PersonneMorale("pm3", "SiRET pm3","raisonsoc pm3", tpm1);
             personneMoraleRepository.save(pm3);
 // Création de client bancaires
             ClientBancaire cb1 =new ClientBancaire();
-            SimpleJpaRepository<T, Object> clientBancaireRepository;
+
             clientBancaireRepository.save(cb1);
             ClientBancaire cb2=new ClientBancaire();
             clientBancaireRepository.save(cb2);
