@@ -1,8 +1,6 @@
 package com.example.banque.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity(name = "PersonneMorale")
 @Table(name = "personne_morale")
@@ -13,12 +11,43 @@ public class PersonneMorale extends Personne {
     @Column(name = "raison_sociale", nullable = false, columnDefinition = "TEXT")
     private String raisonSociale;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_personne_morale_id")
+    private TypePersonneMorale typePersonneMorale;
+
     public PersonneMorale() {}
 
     public PersonneMorale(String adresse, String SIRET, String raisonSociale) {
         super(adresse);
         this.SIRET = SIRET;
         this.raisonSociale = raisonSociale;
+    }
+
+    public PersonneMorale(String adresse, String SIRET, String raisonSociale,
+                          TypePersonneMorale typePersonneMorale) {
+        this(adresse, SIRET, raisonSociale);
+        setTypePersonneMorale(typePersonneMorale);
+    }
+
+    public TypePersonneMorale getTypePersonneMorale() {
+        return typePersonneMorale;
+    }
+
+    public void setTypePersonneMorale(TypePersonneMorale nouveauType) {
+        if (this.typePersonneMorale == nouveauType) return;
+        if (this.typePersonneMorale != null) {
+            this.typePersonneMorale.getPersonnesMorales().removeIf(pm -> pm == this);
+        }
+        this.typePersonneMorale = nouveauType;
+        if (nouveauType != null &&
+                nouveauType.getPersonnesMorales().stream().noneMatch(pm -> pm == this)) {
+            nouveauType.getPersonnesMorales().add(this);
+        }
+    }
+
+    @PreRemove
+    private void gererLiens() {
+        setTypePersonneMorale(null);
     }
 
     public String getSIRET() {

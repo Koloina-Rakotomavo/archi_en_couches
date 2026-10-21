@@ -5,6 +5,8 @@ import com.example.banque.model.PersonneMorale;
 import com.example.banque.model.PersonnePhysique;
 import com.example.banque.model.ProduitBancaire;
 import com.example.banque.model.TypeProduit;
+import com.example.banque.model.TypePersonneMorale;
+import com.example.banque.repository.TypePersonneMoraleRepository;
 import com.example.banque.repository.PersonneMoraleRepository;
 import com.example.banque.repository.PersonnePhysiqueRepository;
 import com.example.banque.repository.TypeProduitRepository;
@@ -33,7 +35,8 @@ public class BanqueApplication
     CommandLineRunner testerBackend(TypeProduitRepository typeProduitRepository,
                                    PersonneMoraleRepository personneMoraleRepository,
                                    PersonnePhysiqueRepository personnePhysiqueRepository,
-                                   ProduitBancaireRepository produitBancaireRepository)
+                                   ProduitBancaireRepository produitBancaireRepository,
+                                   TypePersonneMoraleRepository typePersonneMoraleRepository)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
@@ -105,15 +108,27 @@ public class BanqueApplication
             System.out.println("*******************************\nListe des produits dont la rentabilité est >=0.3 pour la banque");
             listetypeProduit=typeProduitRepository.findByTauxInteretAgiosGreaterThanEqualOrderByTauxInteretAgiosAsc(0.3f);
             System.out.println(listetypeProduit);
+            // 5.7 : plusieurs personnes morales peuvent partager le même type.
+            TypePersonneMorale societe = typePersonneMoraleRepository.save(
+                    new TypePersonneMorale("Société"));
+            TypePersonneMorale association = typePersonneMoraleRepository.save(
+                    new TypePersonneMorale("Association"));
             PersonneMorale pm1 = new PersonneMorale("102bis rue du Vesuve", "SIRET1", "Pizza Tonio");
             PersonneMorale pm2 = new PersonneMorale("45 Boulevard du fleuve", "SIRET2", "Meubles cosy");
             PersonneMorale pm3 = new PersonneMorale("14 allee des platanes", "SIRET3", "Espaces tres verts");
+            pm1.setTypePersonneMorale(societe);
+            pm2.setTypePersonneMorale(societe);
+            pm3.setTypePersonneMorale(association);
             // Enregistrement en base
             personneMoraleRepository.save(pm1);
             personneMoraleRepository.save(pm2);
             personneMoraleRepository.save(pm3);
             // Affichage du résultat
             System.out.println(personneMoraleRepository.findAll());
+            System.out.println("\n*** 5.7 : types de personnes morales ***");
+            for (TypePersonneMorale type : typePersonneMoraleRepository.findAll()) {
+                System.out.println(type + " : " + type.getPersonnesMorales());
+            }
             // Ajout de personnes physiques
             PersonnePhysique pp1 = new PersonnePhysique("19 rue des fleurs, 80000 Amiens", "Dupont", "Jean");
             personnePhysiqueRepository.save(pp1);
