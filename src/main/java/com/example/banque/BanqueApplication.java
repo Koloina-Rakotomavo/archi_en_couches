@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,6 +181,69 @@ public class BanqueApplication
             else {
                 System.out.println("pb3 n''existe plus");
             }
+            // Création de produits bancaires
+            tp2= typeProduitRepository.findById(tp2.getId()).orElseThrow();
+            pb2 = new ProduitBancaire(1,"num4",tp2);
+            produitBancaireRepository.save(pb2);
+            tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
+            pb3 = new ProduitBancaire(2,"num5",tp3);
+            produitBancaireRepository.save(pb3);
+            tp3= typeProduitRepository.findById(tp3.getId()).orElseThrow();
+            pb1 = new ProduitBancaire(3,"num6",tp3);
+            produitBancaireRepository.save(pb1);
+// Création de personnes physiques
+            PersonnePhysique pp1=new PersonnePhysique("adresse_pp1","nom_pp1","prenom_pp1");
+            personnePhysiqueRepository.save(pp1);
+            PersonnePhysique pp2=new PersonnePhysique("adresse_pp2","nom_pp2","prenom_pp2");
+            personnePhysiqueRepository.save(pp2);
+            PersonnePhysique pp3=new PersonnePhysique("adresse_pp3","nom_pp3","prenom_pp3");
+            personnePhysiqueRepository.save(pp3);
+// Création de types de personnes morales
+            TypePersonneMorale tpm1=new TypePersonneMorale("SA");
+            typePersonneMoraleRepository.save(tpm1);
+            TypePersonneMorale tpm2=new TypePersonneMorale("SARL");
+            typePersonneMoraleRepository.save(tpm2);
+            TypePersonneMorale tpm3=new TypePersonneMorale("Auto Entrepreneur");
+            typePersonneMoraleRepository.save(tpm3);
+// Création de personnes morales
+            PersonneMorale pm1=new PersonneMorale("pm1", "SiRET pm1","raisonsoc pm1", tpm1);
+            personneMoraleRepository.save(pm1);
+            PersonneMorale pm2=new PersonneMorale("pm2", "SiRET pm2","raisonsoc pm2", tpm2);
+            personneMoraleRepository.save(pm2);
+            PersonneMorale pm3=new PersonneMorale("pm3", "SiRET pm3","raisonsoc pm3", tpm1);
+            personneMoraleRepository.save(pm3);
+// Création de client bancaires
+            ClientBancaire cb1 =new ClientBancaire();
+            SimpleJpaRepository<T, Object> clientBancaireRepository;
+            clientBancaireRepository.save(cb1);
+            ClientBancaire cb2=new ClientBancaire();
+            clientBancaireRepository.save(cb2);
+            ClientBancaire cb3=new ClientBancaire();
+            clientBancaireRepository.save(cb3);
+// Ajout des participants aux clients
+            pm1=personneMoraleRepository.findById(pm1.getId()).orElseThrow();
+            cb1.addPersonne(pm1);
+            clientBancaireRepository.save(cb1);
+            cb1=clientBancaireRepository.findById(cb1.getId()).orElseThrow();
+            pp2=personnePhysiqueRepository.findById(pp2.getId()).orElseThrow();
+            cb1.addPersonne(pp2);
+            clientBancaireRepository.save(cb1);
+            pp1=personnePhysiqueRepository.findById(pp1.getId()).orElseThrow();
+            cb2=clientBancaireRepository.findById(cb2.getId()).orElseThrow();
+            pp1.addClientBancaire(cb2);
+            personnePhysiqueRepository.save(pp1);
+            cb3=clientBancaireRepository.findById(cb3.getId()).orElseThrow();
+            pp3=personnePhysiqueRepository.findById(pp3.getId()).orElseThrow();
+            cb3.addPersonne(pp3);
+            clientBancaireRepository.save(cb3);
+            System.out.println("***************************************************" +
+                    "\nLes personnes physiques" +
+                    "***********************************************************");
+            System.out.println(personnePhysiqueRepository.findAll());
+            System.out.println("***************************************************" +
+                    "\nLes personnes morales" +
+                    "***********************************************************");
+            System.out.println(personneMoraleRepository.findAll());
 
         };
     }
