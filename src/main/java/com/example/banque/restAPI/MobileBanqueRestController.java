@@ -3,6 +3,10 @@ package com.example.banque.restAPI;
 import com.example.banque.dataTransferObjects.OperationDto;
 import com.example.banque.dataTransferObjects.ProduitBancaireDto;
 import com.example.banque.dataTransferObjects.TypeProduitDto;
+import com.example.banque.dataTransferObjects.VirementDto;
+import com.example.banque.dataTransferObjects.VirementResultatDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import com.example.banque.service.MobileBanqueService;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +40,9 @@ public class MobileBanqueRestController {
     @GetMapping("/produits/{numeroCompte}/operations")
     public List<OperationDto> getDernieresOperations(@PathVariable("numeroCompte") String numeroCompte) {
         return mobileService.getDernieresOperations(numeroCompte);
+    }
+    @PostMapping("/virements")
+    public ResponseEntity<VirementResultatDto> effectuerVirement(@RequestBody VirementDto dto) {
+        return new ResponseEntity<>(mobileService.effectuerVirement(dto), HttpStatus.CREATED);
     }
 }
