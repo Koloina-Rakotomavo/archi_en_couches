@@ -32,4 +32,22 @@ public class TypeProduitRestController {
         TypeProduit tp = typeProduitService.getTypeProduitById(idTypeProduit);
         return new ResponseEntity<>(tp, HttpStatus.OK);
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<TypeProduit> addTypeProduit(@RequestBody TypeProduit typeProduit) {
+        TypeProduit tp = typeProduitService.createTypeProduit(typeProduit);
+        return new ResponseEntity<>(tp, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<TypeProduit> updateTypeProduit(@RequestBody TypeProduit typeProduit) {
+        TypeProduit tp = typeProduitService.updateTypeProduit(typeProduit);
+        return new ResponseEntity<>(tp, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteTypeProduit(@PathVariable("id") long id) {
+        typeProduitService.deleteTypeProduitById(id);
+        return new ResponseEntity<>("Suppression OK", HttpStatus.OK);
+    }
 }
