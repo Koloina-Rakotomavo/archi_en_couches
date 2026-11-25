@@ -2,6 +2,7 @@ package com.example.banque;
 
 
 import com.example.banque.model.PersonneMorale;
+import com.example.banque.service.MobileDemoData;
 import com.example.banque.model.ClientBancaire;
 import com.example.banque.repository.ClientBancaireRepository;
 import com.example.banque.model.PersonnePhysique;
@@ -43,7 +44,8 @@ public class BanqueApplication
                                    ProduitBancaireRepository produitBancaireRepository,
                                    TypePersonneMoraleRepository typePersonneMoraleRepository,
                                    ClientBancaireRepository clientBancaireRepository,
-                                   OperationRepository operationRepository)
+                                   OperationRepository operationRepository,
+                                   MobileDemoData mobileDemoData)
     {
         return args -> {
             // On vide la table pour ne pas créer de doublons
@@ -258,6 +260,9 @@ public class BanqueApplication
             operationRepository.save(operation);
             System.out.println("\n*** Opérations bancaires ***");
             System.out.println(operationRepository.findAll());
+
+            // Données de démonstration pour tester la partie 3 dans Postman.
+            mobileDemoData.initialiser();
 
         };
     }
